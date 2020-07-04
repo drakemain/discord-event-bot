@@ -2,7 +2,7 @@ import Discord, { MessageEmbed } from 'discord.js';
 import Dotenv from 'dotenv';
 
 import { parseCommandMessage, setCommandPrefix } from './command-parser';
-import { execCommand } from './state-machine';
+import { execCommand, init as initStateMachine} from './state-machine';
 
 Dotenv.config();
 
@@ -12,6 +12,8 @@ client.on('ready', () => {
     if (process.env.COMMAND_PREFIX) {
         setCommandPrefix(process.env.COMMAND_PREFIX);
     }
+
+    initStateMachine();
 
     console.log('Ready.');
 });

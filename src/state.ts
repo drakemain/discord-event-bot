@@ -1,8 +1,8 @@
-export default abstract class {
-    _isComplete: boolean = false;
+import { requestNewState, requestKillState } from './state-machine';
 
-    get isComplete(): boolean {
-        return this._isComplete;
+abstract class State {
+    constructor() {
+        this.functionMap = new Map();
     }
 
     execCommand = (command: string): boolean => {
@@ -17,10 +17,20 @@ export default abstract class {
         return success;
     }
 
+    static kill = () => {
+        requestKillState();
+    }
+
+    static addState = (state: State) => {
+        requestNewState(state);
+    }
+
     abstract init(): void;
     abstract resume(): void;
     abstract pause(): void;
     abstract cleanup(): void;
 
-    abstract functionMap: Map<string, () => void>;
+    protected functionMap: Map<string, () => void>;
 };
+
+export { State };
