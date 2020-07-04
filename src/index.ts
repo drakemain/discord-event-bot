@@ -2,6 +2,7 @@ import Discord, { MessageEmbed } from 'discord.js';
 import Dotenv from 'dotenv';
 
 import { parseCommandMessage, setCommandPrefix } from './command-parser';
+import { execCommand } from './state-machine';
 
 Dotenv.config();
 
@@ -19,7 +20,7 @@ client.on('message', message => {
     const command = parseCommandMessage(message);
 
     if (command !== null) {
-        message.channel.send(command);
+        execCommand(command);
     }
 });
 
