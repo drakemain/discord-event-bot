@@ -1,0 +1,27 @@
+{
+  "name": "discord-event-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "run-dev": "NODE_ENV=DEVELOPMENT ts-node-dev --inspect --transpileOnly --ignore-watch node_modules src/index.ts",
+    "test": "NODE_ENV=TEST mocha --exit -r ts-node/register src/test/*.ts"
+  },
+  "author": "Drake Main",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/node": "^14.0.14",
+    "ts-node-dev": "^1.0.0-pre.50",
+    "tsc": "^1.20150623.0",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.6"
+  },
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0"
+  }
+}
