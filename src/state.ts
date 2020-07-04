@@ -1,16 +1,21 @@
 import { requestNewState, requestKillState } from './state-machine';
+import Command from './command';
 
 abstract class State {
     constructor() {
         this.functionMap = new Map();
+        this.commandList = new Map();
     }
 
-    execCommand = (command: string): boolean => {
+    execCommand = (commandMessage: string): boolean => {
         let success = false;
+        const command = new Command(commandMessage, this.commandList);
 
-        if (this.functionMap.has(command)) {
+        console.log(command.command, command.argumentList);
+
+        if (command.isValid && this.functionMap.has(command.command)) {
             success = true;
-            const func = this.functionMap.get(command) as () => void;
+            const func = this.functionMap.get(command.command) as () => void;
             func();
         }
 
@@ -30,7 +35,9 @@ abstract class State {
     abstract pause(): void;
     abstract cleanup(): void;
 
+    /* TODO: Too much redundancy. Condense these */
     protected functionMap: Map<string, () => void>;
+    protected commandList: Map<string, number> = new Map();
 };
 
 export { State };

@@ -10,6 +10,9 @@ export default class extends State {
         super();
         this.functionMap.set('add', addState);
         this.functionMap.set('rm', State.kill);
+
+        this.commandList.set('add', 0);
+        this.commandList.set('rm', 0);
     }
 
     init() {

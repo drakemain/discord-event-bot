@@ -15,8 +15,6 @@ const parseCommandMessage = (inputMessage: Message): string | null => {
 
         const command = content.substr(commandPrefix.length + 1).trim();
         result = command;
-
-        console.log(`valid command: ${command}`);
     }
 
     return result;

@@ -22,7 +22,9 @@ client.on('message', message => {
     const command = parseCommandMessage(message);
 
     if (command !== null) {
-        execCommand(command);
+        if (!execCommand(command)) {
+            console.log(`Command was not valid: ${command}`);
+        }
     }
 });
 
