@@ -12,5 +12,5 @@ export default abstract class {
 
     constructor() { }
 
-    //abstract exec(): void;
+    abstract exec(params: string[]): void;
 };

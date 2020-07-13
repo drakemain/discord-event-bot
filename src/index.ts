@@ -1,29 +1,37 @@
 import Discord, { MessageEmbed } from 'discord.js';
 import Dotenv from 'dotenv';
 
-import { parseCommandMessage, setCommandPrefix } from './command-parser';
-import { execCommand, init as initStateMachine} from './state-machine';
+import  * as CommandParser from './command-parser';
+import Command from './commands/command';
+import commandList from './command-list';
 
 Dotenv.config();
+
+let commands: Map<string, Command> = new Map();
+
+for (const cmd of commandList) {
+    commands.set(cmd.name, cmd);
+}
 
 const client = new Discord.Client();
 
 client.on('ready', () => {
     if (process.env.COMMAND_PREFIX) {
-        setCommandPrefix(process.env.COMMAND_PREFIX);
+        CommandParser.setCommandPrefix(process.env.COMMAND_PREFIX);
     }
-
-    initStateMachine();
 
     console.log('Ready.');
 });
 
 client.on('message', message => {
-    const command = parseCommandMessage(message);
+    if (CommandParser.parseCommandMessage(message)) {
+        const commandStr = CommandParser.getCommand();
+        const params = CommandParser.getParams();
 
-    if (command !== null) {
-        if (!execCommand(command)) {
-            console.log(`Command was not valid: ${command}`);
+        const command = commands.get(commandStr);
+
+        if (command) {
+            command.exec(params);
         }
     }
 });

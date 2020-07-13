@@ -1,10 +1,13 @@
 import { Message } from "discord.js";
 
 let commandPrefix = '!EventBot';
+let parsedCommand: string;
+let parsedParams: string[];
+let valid = false;
 //const prefix: string|undefined = process.env.COMMAND_PREFIX;
 
-const parseCommandMessage = (inputMessage: Message): string | null => {
-    let result: string | null = null;
+const parseCommandMessage = (inputMessage: Message): boolean => {
+    valid = false;
     let content = inputMessage.content;
 
     if (commandPrefix 
@@ -13,12 +16,32 @@ const parseCommandMessage = (inputMessage: Message): string | null => {
             && (content.charAt(commandPrefix.length) === ' ')) {
 
 
-        const command = content.substr(commandPrefix.length + 1).trim();
-        result = command;
+        const commandElements = content
+            .substr(commandPrefix.length)
+            .trim()
+            .split(' ');
+
+        if (commandElements.length > 0) {
+            parsedCommand = commandElements.shift() as string;
+            parsedParams = commandElements;
+            valid = true;
+        }
     }
 
-    return result;
+    return valid;
 };
+
+const isValid = () => {
+    return valid;
+}
+
+const getCommand = (): string => {
+    return parsedCommand;
+}
+
+const getParams = (): string[] => {
+    return parsedParams;
+}
 
 const setCommandPrefix = (prefix: string) => {
     if (prefix.length > 0) {
@@ -30,5 +53,8 @@ const setCommandPrefix = (prefix: string) => {
 
 export { 
     parseCommandMessage,
+    isValid,
+    getCommand,
+    getParams,
     setCommandPrefix
 };
