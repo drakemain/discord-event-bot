@@ -4,7 +4,10 @@ let commandPrefix = '!EventBot';
 let parsedCommand: string;
 let parsedParams: string[];
 let valid = false;
-//const prefix: string|undefined = process.env.COMMAND_PREFIX;
+
+const getCommandPrefix = () => {
+    return commandPrefix;
+};
 
 const parseCommandMessage = (inputMessage: Message): boolean => {
     valid = false;
@@ -56,5 +59,6 @@ export {
     isValid,
     getCommand,
     getParams,
-    setCommandPrefix
+    setCommandPrefix,
+    getCommandPrefix
 };

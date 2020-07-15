@@ -25,13 +25,15 @@ client.on('ready', () => {
 
 client.on('message', message => {
     if (CommandParser.parseCommandMessage(message)) {
+        console.log(message.content);
+        console.log(message.mentions);
         const commandStr = CommandParser.getCommand();
         const params = CommandParser.getParams();
 
         const command = commands.get(commandStr);
 
         if (command) {
-            command.exec(params);
+            command.exec(params, message);
         }
     }
 });

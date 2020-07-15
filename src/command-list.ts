@@ -1,8 +1,10 @@
 import Command from './commands/command';
-import Test from './commands/test';
+import Create from './commands/create';
+import Help from './commands/help';
 
 const commandList: Command[] = [
-    new Test(),
+    new Help(),
+    new Create(),
 ];
 
 export default commandList;
