@@ -1,9 +1,10 @@
-import { User } from 'discord.js';
+import { User, TextChannel, Message } from 'discord.js';
 
 export default class {
     private _title: string;
     private _attendees: Set<User>;
     private _reminders: NodeJS.Timeout[] = [];
+    private _responseChannel: TextChannel;
     time: Date;
 
     get title(): string {
@@ -14,10 +15,15 @@ export default class {
         return this._attendees;
     }
 
-    constructor(title: string, time: Date) {
+    get responseChannel(): TextChannel {
+        return this._responseChannel;
+    }
+
+    constructor(title: string, time: Date, message: Message) {
         this._title = title;
         this.time = time;
         this._attendees = new Set();
+        this._responseChannel = message.channel as TextChannel;
     }
 
     addAttendees(attendees: User[]) {
@@ -39,6 +45,7 @@ export default class {
     }
 
     destroy() {
+        console.log(`Destroying ${this.title}`);
         this._reminders.forEach(reminder => {
             clearTimeout(reminder);
         });

@@ -1,18 +1,18 @@
 import Event from './event';
 import { setTimeout } from 'timers';
+import { speak } from './message';
 
 let events: Map<string, Event> = new Map();
-
-const createEvent = (title: string, time: Date): boolean => {
-    return addEvent(new Event(title, time));
-};
 
 const addEvent = (event: Event): boolean => {
     if (!events.has(event.title)) {
         events.set(event.title, event);
-        console.log(`Created ${event.title} for ${event.time}`);
+        console.log(`Created ${event.title} for ${event.time.toUTCString()}`);
+        const reminderMs = event.time.valueOf() - Date.now();
 
-        remindInMs(event.title, 5000);
+        remindInMs(event.title, reminderMs, () => {
+            deleteEvent(event.title);
+        });
 
         return true;
     }
@@ -26,6 +26,7 @@ const deleteEvent = (title: string): boolean => {
     if (event) {
         event.destroy();
         events.delete(title);
+        console.log(`${title} deleted.`);
         return true;
     }
 
@@ -43,12 +44,16 @@ const printEvent = (title: string) => {
     return false;
 };
 
-const remindInMs = (eventTitle: string, msUntilReminder: number): boolean => {
+const remindInMs = (eventTitle: string, msUntilReminder: number
+    , callback?: () => void): boolean => {
     const event = events.get(eventTitle);
 
     if ((msUntilReminder > 0) && event) {
         const timer = setTimeout(() => {
-            console.log(`REMINDER: ${event.title}`);
+            speak(`REMINDER: ${event.title}`, event.responseChannel);
+            if (callback) {
+                callback();
+            }
         }, msUntilReminder);
 
         event.addReminder(timer);
@@ -60,7 +65,7 @@ const remindInMs = (eventTitle: string, msUntilReminder: number): boolean => {
 };
 
 export {
-    createEvent,
+    //createEvent,
     addEvent,
     deleteEvent
 };

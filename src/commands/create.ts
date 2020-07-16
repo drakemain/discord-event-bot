@@ -12,9 +12,9 @@ export default class extends Command {
         if (params.length >= 1) {
             const title = params[0];
             let time = new Date();
-            time.setMinutes(time.getMinutes() + 1);
+            time.setSeconds(time.getSeconds() + 7);
 
-            const event = new Event(title, time);
+            const event = new Event(title, time, message);
 
             message.mentions.users.forEach(user => {
                 event.addAttendee(user);
