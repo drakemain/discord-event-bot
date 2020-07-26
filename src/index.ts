@@ -4,6 +4,7 @@ import Dotenv from 'dotenv';
 import  * as CommandParser from './command-parser';
 import Command from './commands/command';
 import commandList from './command-list';
+import { speak } from './message';
 
 Dotenv.config();
 
@@ -25,15 +26,18 @@ client.on('ready', () => {
 
 client.on('message', message => {
     if (CommandParser.parseCommandMessage(message)) {
-        console.log(message.content);
-        console.log(message.mentions);
         const commandStr = CommandParser.getCommand();
         const params = CommandParser.getParams();
 
         const command = commands.get(commandStr);
 
         if (command) {
-            command.exec(params, message);
+            try{
+                command.exec(params, message);
+            } catch(e) {
+                console.error(`Failed to run command: ${e.message}`);
+                message.channel.send(`Error: ${e.message}`);
+            }
         }
     }
 });

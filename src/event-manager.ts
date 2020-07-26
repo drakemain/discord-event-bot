@@ -1,4 +1,5 @@
 import Event from './event';
+import { User } from 'discord.js';
 import { setTimeout } from 'timers';
 import { speak } from './message';
 
@@ -9,15 +10,16 @@ const addEvent = (event: Event): boolean => {
         events.set(event.title, event);
         console.log(`Created ${event.title} for ${event.time.toUTCString()}`);
         const reminderMs = event.time.valueOf() - Date.now();
+        const hourBeforeReminderMs = (event.time.valueOf() - (1000*60*60)) - Date.now();
 
         remindInMs(event.title, reminderMs, () => {
             deleteEvent(event.title);
         });
 
-        return true;
+        remindInMs(event.title, hourBeforeReminderMs);
+    } else {
+        throw new Error(`Event with title ${event.title} already exists! Titles must be unique.`);
     }
-
-    return false;
 };
 
 const deleteEvent = (title: string): boolean => {
@@ -49,8 +51,14 @@ const remindInMs = (eventTitle: string, msUntilReminder: number
     const event = events.get(eventTitle);
 
     if ((msUntilReminder > 0) && event) {
+        let msg = `REMINDER: \"${event.title}\" is at ${event.time}.`;
+        
+        for (const attendee of event.attendees.keys()) {
+            msg += `\n\t${attendee.toString()}`;
+        }
+
         const timer = setTimeout(() => {
-            speak(`REMINDER: ${event.title}`, event.responseChannel);
+            speak(msg, event.responseChannel);
             if (callback) {
                 callback();
             }
