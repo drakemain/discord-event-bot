@@ -105,6 +105,7 @@ const getDateOfEvent = (time: string, date: string): Date => {
 export default class extends Command {
     _name = 'create';
     _description = 'Creates a new event.'
+    _detail = '\`create \"[title]\" [hh:mm] [mm/dd/yy] [@users]\`';
 
     exec(params: string[], message: Message) {
         const title = parseTitle(params);

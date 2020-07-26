@@ -6,6 +6,7 @@ import { deleteEvent, getEvent } from '../event-manager';
 export default class extends Command {
     _name = 'delete';
     _description = 'Deletes an event.';
+    _detail = '\`delete [title]\`';
 
     exec(params: string[], message: Message) {
         params.forEach(title => {

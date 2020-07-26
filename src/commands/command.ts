@@ -4,6 +4,7 @@ export default abstract class {
     private _params: string[] = [];
     protected abstract _name: string;
     protected abstract _description: string;
+    protected abstract _detail: string;
 
     get params(): string[] {
         return this._params;
@@ -15,6 +16,10 @@ export default abstract class {
 
     get description(): string {
         return this._description;
+    }
+
+    get detail(): string {
+        return this._detail;
     }
 
     constructor() { }
