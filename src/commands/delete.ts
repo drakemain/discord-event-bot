@@ -3,6 +3,7 @@ import { deleteEvent } from '../event-manager';
 
 export default class extends Command {
     _name = 'create';
+    _description = 'Deletes an event.';
 
     exec(params: string[]) {
         if (params.length >= 1) {

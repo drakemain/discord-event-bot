@@ -5,7 +5,7 @@ import { speak } from './message';
 
 let events: Map<string, Event> = new Map();
 
-const addEvent = (event: Event): boolean => {
+const addEvent = (event: Event) => {
     if (!events.has(event.title)) {
         events.set(event.title, event);
         console.log(`Created ${event.title} for ${event.time.toUTCString()}`);

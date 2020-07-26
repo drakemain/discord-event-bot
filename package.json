@@ -8,6 +8,7 @@
   },
   "scripts": {
     "run-dev": "NODE_ENV=DEVELOPMENT ts-node-dev --inspect --transpileOnly --ignore-watch node_modules src/index.ts",
+    "build": "tsc",
     "test": "NODE_ENV=TEST mocha --exit -r ts-node/register src/test/*.ts"
   },
   "author": "Drake Main",
@@ -21,6 +22,7 @@
     "typescript": "^3.9.6"
   },
   "dependencies": {
+    "@types/ws": "^7.2.6",
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0"
   }
