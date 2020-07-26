@@ -35,8 +35,8 @@ const deleteEvent = (title: string): boolean => {
     return false;
 };
 
-const printEvent = (title: string) => {
-    const event = events.get(title);
+const getEventList = () => {
+    //const event = events.get(title);
 
     if (event) {
         // do something
@@ -44,6 +44,10 @@ const printEvent = (title: string) => {
     }
 
     return false;
+};
+
+const getEvent = (title: string): Event | undefined => {
+    return events.get(title);
 };
 
 const remindInMs = (eventTitle: string, msUntilReminder: number
@@ -75,5 +79,6 @@ const remindInMs = (eventTitle: string, msUntilReminder: number
 export {
     //createEvent,
     addEvent,
-    deleteEvent
+    deleteEvent,
+    getEvent
 };

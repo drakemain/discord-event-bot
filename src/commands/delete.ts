@@ -1,32 +1,29 @@
+import { Message } from 'discord.js';
+
 import Command from './command';
-import { deleteEvent } from '../event-manager';
+import { deleteEvent, getEvent } from '../event-manager';
 
 export default class extends Command {
-    _name = 'create';
+    _name = 'delete';
     _description = 'Deletes an event.';
 
-    exec(params: string[]) {
-        if (params.length >= 1) {
-            let title: string = '';
-            let readingTitle = false;
+    exec(params: string[], message: Message) {
+        params.forEach(title => {
+            const event = getEvent(title);
 
-            for (const param of params) {
-                if (!readingTitle) {
-                    if (param.charAt(0) == "\"") {
-                        param.substr(1);
-                        readingTitle = true;
-                    }
-                }
+            if (event) {
+                const attendees = event.attendees.values();
+                
+                if (deleteEvent(title)) {
+                    let responseMsg = `Event ${title} deleted.\n`;
 
-                if (readingTitle) {
-                    if (param.charAt(param.length - 1) == "\"") {
-                        //param.subs
+                    for (const attendee of attendees) {
+                        responseMsg += `\t${attendee.toString()}\n`;
                     }
-                    title += param;
+
+                    message.channel.send(responseMsg);
                 }
             }
-
-            deleteEvent(title);
-        }
+        });
     }
 }
