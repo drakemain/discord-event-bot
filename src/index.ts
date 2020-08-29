@@ -38,6 +38,8 @@ client.on('message', message => {
                 console.error(`Failed to run command: ${e.message}`);
                 message.channel.send(`Error: ${e.message}`);
             }
+        } else {
+            message.channel.send('Wot?');
         }
     }
 });
