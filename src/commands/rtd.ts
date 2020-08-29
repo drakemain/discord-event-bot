@@ -16,6 +16,8 @@ export default class extends Command {
             });
 
             message.channel.send(rtdChallenge(challengers));
+        } else {
+            message.channel.send(`${generateRandomNumber(1, 100)}`);
         }
     }
 };
