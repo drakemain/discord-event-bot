@@ -72,31 +72,40 @@ const findDateParam = (params: string[]): string => {
         }
     }
 
-    throw new Error('Unrecognized or missing date.');
+    //throw new Error('Unrecognized or missing date.');
+    return '';
 }
 
 const getDateOfEvent = (time: string, date: string): Date => {
     const result = new Date();
     const timeParams = time.split(':');
     let dateParams: string[] = [];
+    const attemptGuessDate = date.length === 0;
 
-    if (date.includes('/')) {
-        dateParams = date.split('/');
-    } else if (date.includes('.')) {
-        dateParams = date.split('.');
-    } else if (date.includes('-')) {
-        dateParams = date.split('.');
-    } 
+    if (!attemptGuessDate) {
+        if (date.includes('/')) {
+            dateParams = date.split('/');
+        } else if (date.includes('.')) {
+            dateParams = date.split('.');
+        } else if (date.includes('-')) {
+            dateParams = date.split('.');
+        } 
+
+        result.setMonth(Number(dateParams[0]) - 1);
+        result.setDate(Number(dateParams[1]));
+        result.setFullYear(Number('20' + dateParams[2]));
+    }
     
     result.setHours(Number(timeParams[0]));
     result.setMinutes(Number(timeParams[1]));
-    result.setMonth(Number(dateParams[0]) - 1);
-    result.setDate(Number(dateParams[1]));
-    result.setFullYear(Number('20' + dateParams[2]));
     result.setSeconds(0);
 
     if (result.valueOf() < Date.now()) {
-        throw new Error('Date has already passed!');
+        if (attemptGuessDate) {
+            result.setDate(result.getDate() + 1);
+        } else {
+            throw new Error('Date has already passed!');
+        }
     }
 
     return result;
