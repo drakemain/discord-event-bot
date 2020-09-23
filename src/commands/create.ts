@@ -124,17 +124,9 @@ export default class extends Command {
 
         if (time) {
             const event = new Event(title, time, message);
-            let response = `${title} event created for \n`;
-
-            event.attendees.forEach(user => {
-                response += `\t${user.toString()}\n`;
-            });
-
-            response += `on ${time.getMonth() + 1}/${time.getDate()} `;
-            response += `at ${time.getHours()}:${time.getMinutes()}`;
 
             addEvent(event);
-            message.channel.send(response);
+            message.channel.send(`Created ${event.toString()}`);
         }
     }
 }

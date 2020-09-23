@@ -56,4 +56,17 @@ export default class {
             clearTimeout(reminder);
         });
     }
+
+    toString() {
+        let str = `${this.title}:\n`;
+        
+        this.attendees.forEach(attendee => {
+            str += `\t${attendee.toString()}\n`
+        });
+
+        str += `on ${this.time.getMonth() + 1}/${this.time.getDate()} `;
+        str += `at ${this.time.getHours()}:${this.time.getMinutes()}`;
+
+        return str;
+    }
 }

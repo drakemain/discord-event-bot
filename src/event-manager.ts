@@ -57,9 +57,9 @@ const remindInMs = (eventTitle: string, msUntilReminder: number
     if ((msUntilReminder > 0) && event) {
         let msg = `REMINDER: \"${event.title}\" is at ${event.time}.`;
         
-        for (const attendee of event.attendees.keys()) {
-            msg += `\n\t${attendee.toString()}`;
-        }
+        event.attendees.forEach(attendee => {
+            msg += `\t${attendee.toString()}\n`;
+        });
 
         const timer = setTimeout(() => {
             speak(msg, event.responseChannel);
@@ -77,7 +77,6 @@ const remindInMs = (eventTitle: string, msUntilReminder: number
 };
 
 export {
-    //createEvent,
     addEvent,
     deleteEvent,
     getEvent
