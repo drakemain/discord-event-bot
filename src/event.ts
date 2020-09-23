@@ -2,7 +2,7 @@ import { User, TextChannel, Message } from 'discord.js';
 
 export default class {
     private _title: string;
-    private _attendees: Set<User>;
+    private _attendees: Map<string, User>;
     private _reminders: NodeJS.Timeout[] = [];
     private _responseChannel: TextChannel;
     time: Date;
@@ -11,7 +11,7 @@ export default class {
         return this._title;
     }
 
-    get attendees(): Set<User> {
+    get attendees(): Map<string, User> {
         return this._attendees;
     }
 
@@ -22,13 +22,23 @@ export default class {
     constructor(title: string, time: Date, message: Message) {
         this._title = title;
         this.time = time;
-        this._attendees = new Set();
+        this._attendees = new Map();
         this._responseChannel = message.channel as TextChannel;
+
+        this.addAttendee(message.author);
+        this.addAttendees(message.mentions.users.array());
     }
 
     addAttendees(attendees: User[]) {
         for (const attendee of attendees) {
-            this._attendees.add(attendee);
+            this.addAttendee(attendee);
+        }
+    }
+
+    addAttendee(attendee: User) {
+        console.log('test');
+        if (!this._attendees.has(attendee.valueOf())) {
+            this._attendees.set(attendee.valueOf(), attendee);
         }
     }
 
@@ -36,12 +46,8 @@ export default class {
         this._reminders.push(timerId);
     }
 
-    addAttendee(attendee: User) {
-        this._attendees.add(attendee);
-    }
-
     removeAttendee(attendee: User) {
-        this.attendees.delete(attendee);
+        this.attendees.delete(attendee.valueOf());
     }
 
     destroy() {

@@ -88,7 +88,7 @@ const getDateOfEvent = (time: string, date: string): Date => {
         } else if (date.includes('.')) {
             dateParams = date.split('.');
         } else if (date.includes('-')) {
-            dateParams = date.split('.');
+            dateParams = date.split('-');
         } 
 
         result.setMonth(Number(dateParams[0]) - 1);
@@ -126,15 +126,11 @@ export default class extends Command {
             const event = new Event(title, time, message);
             let response = `${title} event created for \n`;
 
-            event.attendees.add(message.author);
-            response += `\t${message.author.toString()}\n`;
-
-            message.mentions.users.forEach(user => {
+            event.attendees.forEach(user => {
                 response += `\t${user.toString()}\n`;
-                event.addAttendee(user);
             });
 
-            response += `on ${time.getMonth()}/${time.getDate()} `;
+            response += `on ${time.getMonth() + 1}/${time.getDate()} `;
             response += `at ${time.getHours()}:${time.getMinutes()}`;
 
             addEvent(event);
