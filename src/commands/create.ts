@@ -64,14 +64,16 @@ const findTimeParam = (params: string[]): string => {
 };
 
 const findDateParam = (params: string[]): string => {
-    const dateRegex = new RegExp('^((0?[1-9]|1[012])[- \/.](0?[1-9]|[12][0-9]|3[01])[- \/.](19|20)?[0-9]{2})*$')
+    const dateRegex = new RegExp('^((0?[1-9]|1[012])[- \/.](0?[1-9]|[12][0-9]|3[01])([- \/.](20)?[0-9]{2})?)$')
 
     for (const param of params) {
+        console.log(param);
         if (dateRegex.test(param)) {
             return param;
         }
     }
 
+    console.log('NO MATCH');
     //throw new Error('Unrecognized or missing date.');
     return '';
 }
@@ -81,8 +83,10 @@ const getDateOfEvent = (time: string, date: string): Date => {
     const timeParams = time.split(':');
     let dateParams: string[] = [];
     const attemptGuessDate = date.length === 0;
+    console.log(date);
 
     if (!attemptGuessDate) {
+        console.log('NOT GUESS');
         if (date.includes('/')) {
             dateParams = date.split('/');
         } else if (date.includes('.')) {
@@ -93,7 +97,9 @@ const getDateOfEvent = (time: string, date: string): Date => {
 
         result.setMonth(Number(dateParams[0]) - 1);
         result.setDate(Number(dateParams[1]));
-        result.setFullYear(Number('20' + dateParams[2]));
+        if (dateParams.length === 3) {
+            result.setFullYear(Number('20' + dateParams[2]));
+        }
     }
     
     result.setHours(Number(timeParams[0]));
@@ -103,6 +109,8 @@ const getDateOfEvent = (time: string, date: string): Date => {
     if (result.valueOf() < Date.now()) {
         if (attemptGuessDate) {
             result.setDate(result.getDate() + 1);
+        } else if (dateParams.length === 2) {
+            result.setFullYear(result.getFullYear() + 1);
         } else {
             throw new Error('Date has already passed!');
         }
