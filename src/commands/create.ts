@@ -23,7 +23,6 @@ const parseTitle = (params: string[]): string => {
     if (endIndex >= 0) {
         for (let i = startIndex; i <= endIndex; ++i) {
             let titleWord = params[i];
-            console.log(titleWord);
 
             // remove leading quote
             if (i === startIndex) {
@@ -32,10 +31,9 @@ const parseTitle = (params: string[]): string => {
 
             // remove tailing quote
             if (i === endIndex) {
-                titleWord = titleWord.substr(0, params[i].length - 2);
+                titleWord = titleWord.substr(0, titleWord.length - 1);
             } 
 
-            console.log(titleWord);
             result += titleWord;
 
             if (i < endIndex) {
@@ -67,13 +65,11 @@ const findDateParam = (params: string[]): string => {
     const dateRegex = new RegExp('^((0?[1-9]|1[012])[- \/.](0?[1-9]|[12][0-9]|3[01])([- \/.](20)?[0-9]{2})?)$')
 
     for (const param of params) {
-        console.log(param);
         if (dateRegex.test(param)) {
             return param;
         }
     }
 
-    console.log('NO MATCH');
     //throw new Error('Unrecognized or missing date.');
     return '';
 }
@@ -83,10 +79,8 @@ const getDateOfEvent = (time: string, date: string): Date => {
     const timeParams = time.split(':');
     let dateParams: string[] = [];
     const attemptGuessDate = date.length === 0;
-    console.log(date);
 
     if (!attemptGuessDate) {
-        console.log('NOT GUESS');
         if (date.includes('/')) {
             dateParams = date.split('/');
         } else if (date.includes('.')) {
