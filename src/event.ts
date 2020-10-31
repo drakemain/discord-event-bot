@@ -1,4 +1,4 @@
-import { User, TextChannel, Message } from 'discord.js';
+import { User, TextChannel, Message, Role, GuildMember } from 'discord.js';
 
 export default class {
     private _title: string;
@@ -27,6 +27,12 @@ export default class {
 
         this.addAttendee(message.author);
         this.addAttendees(message.mentions.users.array());
+
+        message.mentions.roles.array().forEach((role: Role) => {
+            role.members.array().forEach((member: GuildMember) => {
+                this.addAttendee(member.user)
+            });
+        });
     }
 
     addAttendees(attendees: User[]) {
@@ -36,7 +42,6 @@ export default class {
     }
 
     addAttendee(attendee: User) {
-        console.log('test');
         if (!this._attendees.has(attendee.valueOf())) {
             this._attendees.set(attendee.valueOf(), attendee);
         }
